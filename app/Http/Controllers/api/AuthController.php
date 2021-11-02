@@ -16,7 +16,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string',
         ]);
         if ($validator->fails()) {
             return response(['errors'=>$validator->errors()->all()], 422);
@@ -52,5 +52,12 @@ class AuthController extends Controller
             $response = ["message" =>'User does not exist'];
             return response($response, 422);
         }
+    }
+
+    public function fetchAgents()
+    {
+        $user = User::where('role', '=', "Agent")
+        ->get(['id', 'name']);
+        return $user;
     }
 }
